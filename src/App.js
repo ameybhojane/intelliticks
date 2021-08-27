@@ -1,23 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Displayprops from "./Displayprops.js";
 
 function App() {
+  const [newProp, setnewProp] = useState({
+    name: "",
+    description: "",
+    size: "",
+  });
+  const [propList, setpropList] = useState([]);
+  const [disablebutton, setdisablebutton] = useState(true);
+  function Checker() {
+    if (
+      newProp.name !== "" &&
+      newProp.description !== "" &&
+      newProp.size !== ""
+    ) {
+      setdisablebutton(false);
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>Welcome Agent</h1>
+      <div>
+        <h3>Add New Property</h3>
+        <input
+          placeholder={`Add Name`}
+          value={newProp.name}
+          onChange={(event) => {
+            setnewProp({
+              name: event.target.value,
+              description: newProp.description,
+              size: newProp.size,
+            });
+            Checker();
+          }}
+        />
+        <input
+          placeholder={`Add Description`}
+          value={newProp.description}
+          onChange={(event) => {
+            setnewProp({
+              name: newProp.name,
+              description: event.target.value,
+              size: newProp.size,
+            });
+            Checker();
+          }}
+        />
+        <input
+          placeholder={`Add Size`}
+          value={newProp.size}
+          onChange={(event) => {
+            setnewProp({
+              name: newProp.name,
+              description: newProp.description,
+              size: event.target.value,
+            });
+            Checker();
+          }}
+        />
+        <button
+          onClick={() => {
+            setpropList([...propList, newProp]);
+            setnewProp({
+              name: "",
+              description: "",
+              size: "",
+            });
+            setdisablebutton(true);
+          }}
+          disabled={disablebutton}
         >
-          Learn React
-        </a>
-      </header>
+          Add Property
+        </button>
+      </div>
+      <Displayprops
+        propList={propList}
+        setpropList={setpropList}
+        Checker={Checker}
+      />
     </div>
   );
 }
